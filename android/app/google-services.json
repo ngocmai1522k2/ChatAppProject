@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1062525765741",
+    "project_id": "otpreact-7749f",
+    "storage_bucket": "otpreact-7749f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062525765741:android:fba95d048a75ae0184d764",
+        "android_client_info": {
+          "package_name": "com.chatappproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfxQhLF_3SQWdNpxnhNFwRklPwpikB0As"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

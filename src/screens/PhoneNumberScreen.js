@@ -6,14 +6,43 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {styled} from 'nativewind';
+// add
+import auth from "@react-native-firebase/auth"
 
 export default function PhoneNumberScreen() {
   const navigation = useNavigation();
+   // If null, no SMS has been sent
+   const [confirm, setConfirm] = useState(null);
+
+   // verification code (OTP - One-Time-Passcode)
+   const [phoneNumber,setPhoneNumber] = useState('')
+
+    // Handle the button press
+    const signInWithPhoneNumber = async()=>{
+      try{
+          const confirmmation = await auth().signInWithPhoneNumber(phoneNumber);
+          // const confirmmation = "NVV"
+          setConfirm(confirmmation);
+          console.log(confirmmation)
+          navigation.navigate('OTP',{confirmCode:confirmmation})
+
+          // navigation.navigate('OTP',{confirmCode:confirmmation})
+
+          
+      }catch(error){
+          alert("invalid your phoneNumber")
+          console.log("Error sending code",error)
+      }
+  };
+  
+  
+
+ 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row justify-start">
@@ -56,13 +85,18 @@ export default function PhoneNumberScreen() {
           </View>
         </TouchableOpacity>
         <View className="flex-1">
-          <TextInput className="p-5 bg-gray-100 text-gray-700 rounded-2xl mx-5 mt-5" placeholder='Enter your phone number' />
+          <TextInput className="p-5 bg-gray-100 text-gray-700 rounded-2xl mx-5 mt-5" placeholder='Enter your phone number' 
+          value={phoneNumber}
+          onChangeText={setPhoneNumber} />
         </View>
       </View>
       <View className="flex-row justify-center mt-5">
         <TouchableOpacity
           className="bg-blue-500 py-3 px-10 my-7 mx-7 rounded-xl"
-          onPress={() => navigation.navigate('OTP')}>
+          // onPress={() => navigation.navigate('OTP')}
+          onPress={signInWithPhoneNumber}
+          
+          >
           <Text className="text-white font-bold text-lg text-center ">
             Send OTP
           </Text>

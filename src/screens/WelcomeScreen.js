@@ -14,6 +14,7 @@ export default function WelcomeScreen() {
             <Image source={require('../assets/img/welcome.png')} style={{width: 350, height: 350}} />
         </View>
         <View className="space-y-5 px-6">
+         {/* nho doi thanh login */}
             <TouchableOpacity className="bg-blue-800 py-3 my-7 mx-7 rounded-xl" onPress={()=>navigation.navigate('Login')}>
                 <Text className="text-white font-bold text-lg text-center ">Login</Text>
             </TouchableOpacity>

@@ -1,10 +1,37 @@
 import {View, TouchableOpacity, Text, Image, TextInput} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
-
+import { postApiNoneToken } from '../api/CallApi';
+import { getApiNoneToken } from '../api/CallApi';
 export default function LoginScreen() {
+  const [email,setEmail] =useState("")
+  const[pass,setPass] = useState("")
+  // xu ly dang nhap
+  const login = async()=>{
+    
+    console.log("hihi")
+      try {
+        const respone = await postApiNoneToken("/login",{
+          username:email,
+          password: pass
+        })
+        // const respone = getApiNoneToken("/getAllUser")
+
+
+
+        console.log(respone.data)
+        
+        
+      } catch (error) {
+        console.error("Error while login:", error);
+      }
+    
+    
+  }
+
+
   const navigation = useNavigation();
   return (
     <View className="flex-1 bg-blue-400">
@@ -31,14 +58,14 @@ export default function LoginScreen() {
         }}>
         <View className="form space-y-2">
           <Text className="text-gray-700 ml-4 text-lg">Email address: </Text>
-          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3" />
+          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"  onChangeText={setEmail} value={email} />
           <Text className="text-gray-700 ml-4 text-lg">Password: </Text>
-          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3" />
+          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"  secureTextEntry={true}  onChangeText={setPass} value={pass}/>
         </View>
-        <TouchableOpacity className="flex items-end mb-5">
+        <TouchableOpacity className="flex items-end mb-5" onPress={()=>navigation.navigate("ForgotPassScreen")}>
           <Text className="text-gray-700">Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="flex py-4 bg-blue-500 rounded-2xl mb-1 ">
+        <TouchableOpacity className="flex py-4 bg-blue-500 rounded-2xl mb-1 " onPress={login}>
           <Text className="text-center text-white text-lg font-semibold">
             Login
           </Text>

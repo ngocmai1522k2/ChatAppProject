@@ -10,6 +10,8 @@ import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import PhoneNumberScreen from '../screens/PhoneNumberScreen';
 import OTP from '../screens/OTP';
+import ForgotPassScreen from '../screens/ForgotPassScreen';
+import NewPasswordScreen from '../screens/NewPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +25,8 @@ function AppNavigation() {
         <Stack.Screen name="SignUp" options={{headerShown: false}} component={SignUpScreen} />
         <Stack.Screen name="PhoneNumber" options={{headerShown: false}} component={PhoneNumberScreen} />
         <Stack.Screen name="OTP" options={{headerShown: false}} component={OTP} />
+        <Stack.Screen name="ForgotPassScreen" options={{headerTitle:"",headerStyle:{backgroundColor:"#BEBDB8"}}} component={ForgotPassScreen} />
+        <Stack.Screen name="NewPasswordScreen" options={{headerTitle:"",headerStyle:{backgroundColor:"#BEBDB8"}}} component={NewPasswordScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
