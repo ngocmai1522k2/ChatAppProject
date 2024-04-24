@@ -19,7 +19,7 @@ export default function LoginScreen() {
         })
         // const respone = getApiNoneToken("/getAllUser")
 
-
+        navigation.navigate("HomeChat")
 
         console.log(respone.data)
         

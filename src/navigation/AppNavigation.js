@@ -12,6 +12,7 @@ import PhoneNumberScreen from '../screens/PhoneNumberScreen';
 import OTP from '../screens/OTP';
 import ForgotPassScreen from '../screens/ForgotPassScreen';
 import NewPasswordScreen from '../screens/NewPasswordScreen';
+import HomeChat from './HomeChat';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,8 @@ function AppNavigation() {
         <Stack.Screen name="OTP" options={{headerShown: false}} component={OTP} />
         <Stack.Screen name="ForgotPassScreen" options={{headerTitle:"",headerStyle:{backgroundColor:"#BEBDB8"}}} component={ForgotPassScreen} />
         <Stack.Screen name="NewPasswordScreen" options={{headerTitle:"",headerStyle:{backgroundColor:"#BEBDB8"}}} component={NewPasswordScreen} />
+        <Stack.Screen name="HomeChat" options={{headerShown: false}} component={HomeChat} />
+      
       </Stack.Navigator>
     </NavigationContainer>
   );

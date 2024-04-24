@@ -4,7 +4,7 @@ import axios from 'axios'
 var api = axios.create({
     // IP của PC
 
-    baseURL:'http://192.168.42.137:3001/api/user',
+    baseURL:'http://192.168.42.205:3001/api/user',
     // withCredentials: true 
     // baseURL:'http://192.168.1.13:3001/api/user'
 })
