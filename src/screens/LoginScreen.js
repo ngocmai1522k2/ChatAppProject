@@ -6,8 +6,8 @@ import {useNavigation} from '@react-navigation/native';
 import { postApiNoneToken } from '../api/CallApi';
 import { getApiNoneToken } from '../api/CallApi';
 export default function LoginScreen() {
-  const [email,setEmail] =useState("")
-  const[pass,setPass] = useState("")
+  const [email,setEmail] =useState("hi@gmail.com")
+  const[pass,setPass] = useState("0345641602Nvv!")
   // xu ly dang nhap
   const login = async()=>{
     

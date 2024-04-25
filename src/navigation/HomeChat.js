@@ -35,9 +35,9 @@ export default function HomeChat() {
           
           options={{
           headerShown:false,
-          tabBarLabel: 'Settings',
+          tabBarLabel: 'Profile',
           tabBarIcon: ({ color, size }) => (
-            <Icon name="setting" color={color} size={size} /> // Biểu tượng cho tab Trang chủ
+            <Icon name="user" color={color} size={size} /> // Biểu tượng cho tab Trang chủ
           ),
         }}
       
