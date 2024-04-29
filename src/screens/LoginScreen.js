@@ -5,9 +5,14 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import { postApiNoneToken } from '../api/CallApi';
 import { getApiNoneToken } from '../api/CallApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentUser } from '../features/user/userSlice';
+
 export default function LoginScreen() {
   const [email,setEmail] =useState("hi@gmail.com")
   const[pass,setPass] = useState("0345641602Nvv!")
+  const dispatch = useDispatch()
+  const currentUser = useSelector((state) => state.user.currentUser);
   // xu ly dang nhap
   const login = async()=>{
     
@@ -18,7 +23,9 @@ export default function LoginScreen() {
           password: pass
         })
         // const respone = getApiNoneToken("/getAllUser")
-
+        const user = respone.data.userLogin;
+        dispatch(setCurrentUser(user))
+        console.log("user",user)
         navigation.navigate("HomeChat")
 
         console.log(respone.data)
@@ -34,38 +41,39 @@ export default function LoginScreen() {
 
   const navigation = useNavigation();
   return (
-    <View className="flex-1 bg-blue-400">
-      <SafeAreaView className="flex-1">
+
+    <SafeAreaView className="flex-1 bg-blue-400">
+      <View className="flex-1">
         <View className="flex-row justify-start">
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            className=" h-15 w-15  my-7 mx-7  ">
+            className=" h-15 w-15  my-5 mx-5  ">
             <Icon name="arrowleft" size={30} color={'#fff'} />
           </TouchableOpacity>
         </View>
-        <View className="flex-row justify-center mt-11">
+        <View className="flex-row justify-center">
           <Image
             source={require('../assets/img/login.png')}
-            style={{width: 350, height: 350}}
+            style={{width: 200, height: 230}}
           />
         </View>
-      </SafeAreaView>
+      </View>
       <View
-        className="flex-1 bg-white px-8 pt-8"
+        className="flex bg-white px-5 pt-5 pb-10"
         style={{
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
         }}>
-        <View className="form space-y-2">
-          <Text className="text-gray-700 ml-4 text-lg">Email address: </Text>
-          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"  onChangeText={setEmail} value={email} />
+        <View className="form space-y-5">
+          <Text className="text-gray-700 ml-4 text-lg mb-1">Email address: </Text>
+          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-1"  onChangeText={setEmail} value={email} />
           <Text className="text-gray-700 ml-4 text-lg">Password: </Text>
-          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"  secureTextEntry={true}  onChangeText={setPass} value={pass}/>
+          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-1"  secureTextEntry={true}  onChangeText={setPass} value={pass}/>
         </View>
         <TouchableOpacity className="flex items-end mb-5" onPress={()=>navigation.navigate("ForgotPassScreen")}>
           <Text className="text-gray-700">Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="flex py-4 bg-blue-500 rounded-2xl mb-1 " onPress={login}>
+        <TouchableOpacity className="flex py-3 bg-blue-500 rounded-2xl mb-1 " onPress={login}>
           <Text className="text-center text-white text-lg font-semibold">
             Login
           </Text>
@@ -93,6 +101,6 @@ export default function LoginScreen() {
         </View>
         <View className="flex-row justify-center"></View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

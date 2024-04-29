@@ -3,6 +3,8 @@ import { View, TextInput, Text, TouchableOpacity, Image, StyleSheet } from 'reac
 import Icon from 'react-native-vector-icons/AntDesign';
 import { getApiNoneToken } from '../api/CallApi';
 import { putApiNoneToken } from '../api/CallApi';
+import { useSelector } from 'react-redux';
+
 
 export default function HomeChatScreen() {
   const [searchText, setSearchText] = useState('');
@@ -16,19 +18,23 @@ export default function HomeChatScreen() {
   const [currentUserId,setCurrentUserId] =useState("")
   const [currentUserName,setCurrentUserName] =useState("")
   const [currentUserPhone,setCurrentUserPhone] =useState("")
+  const currentUser = useSelector((state) => state.user.currentUser);
+  console.log("current user",currentUser)
 
   const handleSearch = async (text) => {
     try {
-      const response = await getApiNoneToken("/getDetailsByPhone/" + text);
+      const searchPhone = "+84"+text;
+      const response = await getApiNoneToken("/getDetailsByPhone/" + searchPhone);
       const data = response.data.data;
       // Lấy thông tin người dùng hiện tại
       // sau có redux se thay id mặc định thành currenUserId
       // hiện tại nếu muốn text add friend thì cần thêm số điện thoại mặc định vào dưới
-      const currentUserResponse = await getApiNoneToken("/getDetailsByPhone/" + 7777777777);
-      const currentUserData = currentUserResponse.data.data;
-      setCurrentUserId(currentUserData._id)
-      setCurrentUserName(currentUserData.name)
-      setCurrentUserPhone(currentUserData.phone)
+      // const currentUserResponse = await getApiNoneToken("/getDetailsByPhone/" + 7777777777);
+      // const currentUserData = currentUserResponse.data.data;
+
+      setCurrentUserId(currentUser._id)
+      setCurrentUserName(currentUser.name)
+      setCurrentUserPhone(currentUser.phone)
       if (data) {
         setIdFriend(data._id)
         setName(data.name);
@@ -36,23 +42,23 @@ export default function HomeChatScreen() {
         setAvt(data.avatar);
         setSearched(true);
 
-        if (currentUserData.phone === data.phone) {
+        if (currentUser.phone === data.phone) {
           setIsFriend(true); 
             return;
         }
 
   
         // Kiểm tra xem số điện thoại có trong danh bạ không
-        if (currentUserData.phoneBooks && currentUserData.phoneBooks.length > 0) {
-          const foundUser = currentUserData.phoneBooks.find(user => user.phone === data.phone);
+        if (currentUser.phoneBooks && currentUser.phoneBooks.length > 0) {
+          const foundUser = currentUser.phoneBooks.find(user => user.phone === data.phone);
           if (foundUser) {
             setIsFriend(true); // Nếu tìm thấy số điện thoại trong danh bạ, đặt isFriend thành true
             return; // Dừng hàm và không thực hiện các bước phía dưới nữa
           }
         }
           // nếu có phone trong danh sách mời
-        if (currentUserData.listAddFriend && currentUserData.listAddFriend.length > 0) {
-              const foundUserInInvite = currentUserData.listAddFriend.find(invitation => invitation.phone === data.phone);
+        if (currentUser.listAddFriend && currentUser.listAddFriend.length > 0) {
+              const foundUserInInvite = currentUser.listAddFriend.find(invitation => invitation.phone === data.phone);
           if (foundUserInInvite) {
             setAddFriendText("Đã gửi lời mời");
             return;
