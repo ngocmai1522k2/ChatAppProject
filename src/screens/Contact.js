@@ -66,7 +66,6 @@
         name:currentUserName,
         phone:currentUserPhone,
         avatar: currentUser.avatar
-
       })
       // thực hiện add sdt người gửi vào phonebooks currenUser
       const response2 = await putApiNoneToken("/addFriend/"+currenUserId,{
