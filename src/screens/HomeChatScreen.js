@@ -19,7 +19,7 @@ export default function HomeChatScreen() {
   const [currentUserName,setCurrentUserName] =useState("")
   const [currentUserPhone,setCurrentUserPhone] =useState("")
   const currentUser = useSelector((state) => state.user.currentUser);
-  console.log("current user",currentUser)
+  // console.log("current user",currentUser)
 
   const handleSearch = async (text) => {
     try {
