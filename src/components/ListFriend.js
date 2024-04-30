@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, Image, StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -19,12 +19,13 @@ const ListFriend = ({friends}) => {
     // removeFriend(friend);
   };
   return (
-    <View className="flex-col -scroll-ml-3.5 p-1 m-1">
+    
+    <View className=" pl-4">
       {friends.map((item, id) => (
         <TouchableOpacity
           key={id}
-          className="flex-row items-center justify-items-center border-b-2 py-10">
-          <View className="flex-row w-10/12 h-30">
+          className="flex-row  py-2">
+          <View className="flex-row w-11/12">
             <Image
               source={
                 item.avatar
@@ -33,20 +34,20 @@ const ListFriend = ({friends}) => {
               }
               style={styles.avatar}
             />
-            <View className="ml-3 flex-2" >
+            <View className="ml-3 flex-1" >
               <Text className="text-lg text-ellipsis">{item.name}</Text>
-              <Text className="text-lg text-ellipsis">{item.phone}</Text>
+              <Text className="text-md text-ellipsis">{item.phone}</Text>
             </View>
-            <View className="ml-2 flex-row">
+            <View className="mt-3 flex-row ">
               <TouchableOpacity
                 onPress={() => handleChat(item)}
                 className="ml-3">
-                <FontAwesome name="wechat" size={24} color="green" />
+                <FontAwesome name="wechat" size={26} color="#888" />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleCall(item)}
-                className="ml-3">
-                <Feather name="phone-call" size={24} color="#888" />
+                className="ml-4">
+                <Feather name="phone-call" size={26} color="#888" />
               </TouchableOpacity>
             </View>
           </View>
