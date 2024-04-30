@@ -4,13 +4,18 @@ import axios from 'axios'
 var api = axios.create({
     // IP của PC
 
-    baseURL:'http://192.168.1.9:3001/api/user',
+    baseURL:'http://192.168.42.182:3001/api/user',
     // withCredentials: true 
     // baseURL:'http://192.168.1.13:3001/api/user'
 })
 
 var apiMessage = axios.create({
     baseURL:'http://localhost:3001/api/messages'
+    // baseURL:'http://
+})
+
+var apiConversation = axios.create({
+    baseURL:'http://192.168.42.182:3001/api/conversations'
     // baseURL:'http://
 })
 
@@ -57,4 +62,18 @@ export const getApiMessageNoneToken=(url,data)=>{
 
 export const postApiMessageNoneToken=(url,data)=>{
     return apiMessage.post(url,data)
+}
+
+
+// convesation
+export const postApiapiConversation=(url,data)=>{
+    return apiConversation.post(url,data)
+}
+
+export const getApiapiConversation=(url,data)=>{
+    return apiConversation.get(url,data)
+}
+
+export const putApiapiConversation=(url,data)=>{
+    return apiConversation.put(url,data)
 }

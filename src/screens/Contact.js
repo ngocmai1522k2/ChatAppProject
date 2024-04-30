@@ -71,28 +71,30 @@ export default function Contact() {
 
   console.log('currentFriends', currentFriends);
 
-  const acceptInvite = async (id, name, phone, avatar) => {
-    // Xử lý đồng ý lời mời kết bạn
-    // truyền vào id của người gửi kết bạn
-    // thực hiện add currentUser vào phoneBooks của người gửi
-    const response1 = await putApiNoneToken('/addFriend/' + id, {
-      id: currenUserId,
-      name: currentUserName,
-      phone: currentUserPhone,
-      avatar: currentUser.avatar,
-    });
-    // thực hiện add sdt người gửi vào phonebooks currenUser
-    const response2 = await putApiNoneToken('/addFriend/' + currenUserId, {
-      id: id,
-      name: name,
-      phone: phone,
-      avatar: avatar,
-    });
-    // xóa lời mời của ngkhac gửi cho currentUser
-    const response3 = await postApiNoneToken('/deleteInvite/' + currenUserId, {
-      phone: phone,
-    });
-    // xóa lời trong listADD của người gửi cho currentUser
+    const acceptInvite = async (id,name,phone, avatar) => {
+      // Xử lý đồng ý lời mời kết bạn
+      // truyền vào id của người gửi kết bạn 
+        // thực hiện add currentUser vào phoneBooks của người gửi
+      const response1 = await putApiNoneToken("/addFriend/"+id,{
+        id:  currenUserId,
+        name:currentUserName,
+        phone:currentUserPhone,
+        avatar: currentUser.avatar
+
+      })
+      // thực hiện add sdt người gửi vào phonebooks currenUser
+      const response2 = await putApiNoneToken("/addFriend/"+currenUserId,{
+        id: id,
+        name:name,
+        phone:phone,
+        avatar: avatar
+
+      })
+      // xóa lời mời của ngkhac gửi cho currentUser
+      const response3 = await postApiNoneToken("/deleteInvite/"+currenUserId,{
+        phone:phone
+      })
+      // xóa lời trong listADD của người gửi cho currentUser
 
     const response4 = await postApiNoneToken('/deleteListaddFriend/' + id, {
       phone: currentUserPhone,

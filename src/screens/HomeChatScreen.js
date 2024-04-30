@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, Image, StyleSheet, Modal, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { getApiNoneToken } from '../api/CallApi';
 import { putApiNoneToken } from '../api/CallApi';
 import { useSelector } from 'react-redux';
-
+import { postApiapiConversation } from '../api/CallApi';
 
 export default function HomeChatScreen() {
   const [searchText, setSearchText] = useState('');
@@ -12,88 +12,137 @@ export default function HomeChatScreen() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [searched, setSearched] = useState(false);
-  const [isFriend, setIsFriend] = useState(false); // Sử dụng biến này để kiểm tra xem số điện thoại có trong danh bạ không
-  const [idFiend,setIdFriend] = useState("")
+  const [isFriend, setIsFriend] = useState(false);
+  const [idFriend, setIdFriend] = useState("");
   const [addFriendText, setAddFriendText] = useState("Kết bạn");
-  const [currentUserId,setCurrentUserId] =useState("")
-  const [currentUserName,setCurrentUserName] =useState("")
-  const [currentUserPhone,setCurrentUserPhone] =useState("")
+  const [currentUserId, setCurrentUserId] = useState("");
+  const [currentUserName, setCurrentUserName] = useState("");
+  const [currentUserPhone, setCurrentUserPhone] = useState("");
   const currentUser = useSelector((state) => state.user.currentUser);
-  // console.log("current user",currentUser)
+  const [friendListVisible, setFriendListVisible] = useState(false);
+  const [friendList, setFriendList] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedMembers, setSelectedMembers] = useState([]);
+  const [groupName,setGroupName]=useState("")
 
   const handleSearch = async (text) => {
     try {
-      const searchPhone = "+84"+text;
-      const response = await getApiNoneToken("/getDetailsByPhone/" + searchPhone);
+      const response = await getApiNoneToken("/getDetailsByPhone/" + text);
       const data = response.data.data;
-      // Lấy thông tin người dùng hiện tại
-      // sau có redux se thay id mặc định thành currenUserId
-      // hiện tại nếu muốn text add friend thì cần thêm số điện thoại mặc định vào dưới
-      // const currentUserResponse = await getApiNoneToken("/getDetailsByPhone/" + 7777777777);
-      // const currentUserData = currentUserResponse.data.data;
 
-      setCurrentUserId(currentUser._id)
-      setCurrentUserName(currentUser.name)
-      setCurrentUserPhone(currentUser.phone)
+      setCurrentUserId(currentUser._id);
+      setCurrentUserName(currentUser.name);
+      setCurrentUserPhone(currentUser.phone);
+
       if (data) {
-        setIdFriend(data._id)
+        setIdFriend(data._id);
         setName(data.name);
         setPhone(data.phone);
         setAvt(data.avatar);
         setSearched(true);
 
         if (currentUser.phone === data.phone) {
-          setIsFriend(true); 
-            return;
+          setIsFriend(true);
+          return;
         }
 
-  
-        // Kiểm tra xem số điện thoại có trong danh bạ không
         if (currentUser.phoneBooks && currentUser.phoneBooks.length > 0) {
           const foundUser = currentUser.phoneBooks.find(user => user.phone === data.phone);
           if (foundUser) {
-            setIsFriend(true); // Nếu tìm thấy số điện thoại trong danh bạ, đặt isFriend thành true
-            return; // Dừng hàm và không thực hiện các bước phía dưới nữa
+            setIsFriend(true);
+            return;
           }
         }
-          // nếu có phone trong danh sách mời
+
         if (currentUser.listAddFriend && currentUser.listAddFriend.length > 0) {
-              const foundUserInInvite = currentUser.listAddFriend.find(invitation => invitation.phone === data.phone);
+          const foundUserInInvite = currentUser.listAddFriend.find(invitation => invitation.phone === data.phone);
           if (foundUserInInvite) {
             setAddFriendText("Đã gửi lời mời");
             return;
           }
-}
-        setIsFriend(false); // Nếu không tìm thấy số điện thoại trong danh bạ, đặt isFriend thành false
+        }
+        setIsFriend(false);
       } else {
         setSearched(false);
       }
       setAddFriendText("Kết bạn");
     } catch (error) {
       console.error("Error for search", error);
-      // Xử lý lỗi ở đây nếu cần
     }
   };
 
   const addFriend = async () => {
-  
-    // Gửi yêu cầu kết bạn ở đây
-    const response = await putApiNoneToken("/addListFriend/"+currentUserId,{
-      id:idFiend,
-      name:name,
-      phone:phone,
-    })
-    const response2 = await putApiNoneToken("/addInvite/"+idFiend,{
-        id:currentUserId,
-        name:currentUserName,
-        phone:currentUserPhone
-    })
+    const response = await putApiNoneToken("/addListFriend/" + currentUserId, {
+      id: idFriend,
+      name: name,
+      phone: phone,
+    });
+
+    const response2 = await putApiNoneToken("/addInvite/" + idFriend, {
+      id: currentUserId,
+      name: currentUserName,
+      phone: currentUserPhone
+    });
     setAddFriendText("Đã gửi lời mời");
   };
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
+  const showFriendList = () => {
+    setFriendList(currentUser.phoneBooks);
+    setIsModalVisible(true);
+  };
+  // chọn bạn để tạo nhóm
+  const toggleMemberSelection = (member) => {
+    const isSelected = selectedMembers.includes(member);
+
+    if (isSelected) {
+      setSelectedMembers(selectedMembers.filter((selectedMember) => selectedMember !== member));
+    } else {
+      setSelectedMembers([...selectedMembers, member]);
+    
+    }
+   
+  };
+  // tạo nhóm
+  const createGroup = async()=>{
+   try {
+   
+    const participantIds = selectedMembers.map(member => member.id); // Lấy ra mảng các id của các thành viên được chọn
+    participantIds.push(currentUser._id);
+    // console.log("kk",participantIds)
+    if (participantIds.length < 3) {
+      Alert.alert("Cần chọn ít nhất 2 thành viên để tạo nhóm");
+      return;
+    }
+    if(groupName==""){
+      Alert.alert("Vui lòng nhập tên nhóm để tạo");
+      return;
+    }
+    const respone = await postApiapiConversation("/createGroup",{
+      groupName: groupName,
+      participants:participantIds
+    })
+     console.log("data",respone.data.participants)
+
+    Alert.alert("Tạo nhóm "+groupName+" thành công")
+    setGroupName("")
+    setSelectedMembers([]); // Reset slect sau khi tạo nhóm thành công
+    toggleModal(); // Đóng modal sau khi tạo nhóm thành công
+    
+    
+   } catch (error) {
+    console.log("error for create group",error)
+   }
+    
+  }
 
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 8, borderRadius: 10 }}>
+        <Icon name="search1" size={24} color="#888" />
         <TextInput
           style={{ flex: 1, padding: 8, backgroundColor: 'white', borderRadius: 10 }}
           placeholder="Tìm kiếm..."
@@ -103,11 +152,58 @@ export default function HomeChatScreen() {
             if (text.trim() !== '') {
               handleSearch(text);
             }
-            
           }}
         />
-        <Icon name="search1" size={24} color="#888" />
 
+        {/* Tạo nhóm */}
+        <TouchableOpacity onPress={showFriendList}>
+          <Icon name="addusergroup" size={24} color="#888" />
+        </TouchableOpacity>
+
+        {/* Modal danh sách bạn bè */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isModalVisible}
+          onRequestClose={toggleModal}
+          >
+        <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TextInput onChangeText={setGroupName} value={groupName}
+               style={{borderWidth:1,borderColor:"green",borderRadius:15}} placeholder='Nhập tên nhóm'/>
+
+               {friendList.map((friend, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => toggleMemberSelection(friend)}
+                  style={selectedMembers.includes(friend) ? styles.selectedMember : styles.unselectedMember}
+                 >
+                 <View style={{flexDirection:"row"}}>
+                <Image
+                source={avt ? { uri: avt } : require('../assets/img/codon.jpg')}
+                style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
+                />
+                    <View> 
+                          <Text>{friend.name}</Text>
+                           <Text>{friend.phone}</Text>
+                    </View>
+               </View>
+              
+
+        </TouchableOpacity>
+             ))}
+             {/* // button tạo nhóm */}
+             <TouchableOpacity onPress={createGroup}
+              style={{borderWidth:1,borderColor:"blue",
+              width:"50%",justifyContent:"center",alignItems:"center",top:10,left:120,
+              borderRadius:10,height:50,backgroundColor:'pink'
+                           }}>
+                <Text style={{fontSize:20}}>Tạo nhóm</Text>
+             </TouchableOpacity>
+             {/* {console.log(selectedMembers)} */}
+             </View>
+      </View>
+</Modal>
       </View>
 
       {searched && (
@@ -122,7 +218,7 @@ export default function HomeChatScreen() {
           </View>
           {/* Thay đổi hiển thị dựa trên isFriend */}
           {isFriend ? (
-            <Text  style={styles.friendText}>Bạn bè</Text>
+            <Text style={styles.friendText}>Bạn bè</Text>
           ) : (
             <TouchableOpacity onPress={addFriend} style={styles.addButton}>
               <Text style={styles.addButtonText}>{addFriendText}</Text>
@@ -130,7 +226,6 @@ export default function HomeChatScreen() {
           )}
         </View>
       )}
-
     </View>
   );
 };
@@ -151,9 +246,38 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   friendText: {
-    left:100,
+    left: 100,
     fontSize: 18,
     fontWeight: 'bold',
     color: 'blue',
+  },
+  selectedMember: {
+    backgroundColor: '#4CAF50', // Màu nền khi được chọn
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#2E7D32', // Màu viền khi được chọn
+  },
+  unselectedMember: {
+    backgroundColor: '#FFFFFF', // Màu nền khi chưa được chọn
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#E0E0E0', // Màu viền khi chưa được chọn
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Màu nền của modal
+  },
+  modalContent: {
+    
+    backgroundColor: '#FFFFFF', // Màu nền của nội dung modal
+    padding: 20,
+    borderRadius: 10,
+    width: '80%', // Chiều rộng của nội dung modal
   },
 });
