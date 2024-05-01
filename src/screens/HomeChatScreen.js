@@ -147,7 +147,7 @@ export default function HomeChatScreen() {
     try {
       const participantIds = selectedMembers.map(member => member.id); // Lấy ra mảng các id của các thành viên được chọn
       participantIds.push(currentUser._id);
-      const id = currentUser._id;
+      console.log('currentUser._id', currentUser._id);
       // console.log("kk",participantIds)
       if (participantIds.length < 3) {
         Alert.alert('Cần chọn ít nhất 2 thành viên để tạo nhóm');
@@ -160,7 +160,7 @@ export default function HomeChatScreen() {
       const respone = await postApiapiConversation('/createGroup', {
         groupName: groupName,
         participants: participantIds,
-        idAdmin: id,
+        admin: currentUser._id,
       });
       console.log('data', respone.data.participants);
 
