@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
-import { postApiNoneToken } from '../api/CallApi';
-import { getApiNoneToken } from '../api/CallApi';
+import { getApiapiConversation, postApiNoneToken } from '../../api/CallApi';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentUser } from '../features/user/userSlice';
+import { setCurrentUser } from '../../features/user/userSlice';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+
 
 export default function LoginScreen() {
   const [email,setEmail] =useState("hi@gmail.com")
@@ -22,10 +24,11 @@ export default function LoginScreen() {
           username:email,
           password: pass
         })
-        // const respone = getApiNoneToken("/getAllUser")
         const user = respone.data.userLogin;
         dispatch(setCurrentUser(user))
         console.log("user",user)
+       
+
         navigation.navigate("HomeChat")
 
         console.log(respone.data)
@@ -53,7 +56,7 @@ export default function LoginScreen() {
         </View>
         <View className="flex-row justify-center">
           <Image
-            source={require('../assets/img/login.png')}
+            source={require('../../assets/img/login.png')}
             style={{width: 200, height: 230}}
           />
         </View>
@@ -84,12 +87,12 @@ export default function LoginScreen() {
         <View className="flex-row justify-center space-x-12">
           <TouchableOpacity className="p-2 bg-gray-100 rounded-2xl">
             <Image
-              source={require('../assets/img/gg.png')}
+              source={require('../../assets/img/gg.png')}
               className="w-10 h-10"></Image>
           </TouchableOpacity>
           <TouchableOpacity className="p-2 bg-gray-100 rounded-2xl">
             <Image
-              source={require('../assets/img/fb.png')}
+              source={require('../../assets/img/fb.png')}
               className="w-10 h-10"></Image>
           </TouchableOpacity>
         </View>

@@ -58,33 +58,14 @@ const ListFriend = ({friends}) => {
 };
 
 const styles = StyleSheet.create({
-  friendContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
+  
   avatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
     marginRight: 10,
   },
-  friendDetails: {
-    flex: 1,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  phone: {
-    fontSize: 14,
-    color: '#888',
-  },
-  icon: {
-    marginLeft: 10,
-  },
+  
 });
 
 export default ListFriend;

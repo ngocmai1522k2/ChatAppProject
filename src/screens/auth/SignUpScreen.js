@@ -18,7 +18,7 @@ export default function SignUpScreen() {
         </View>
         <View className="flex-row justify-center mt-11">
           <Image
-            source={require('../assets/img/login.png')}
+            source={require('../../assets/img/login.png')}
             style={{width: 350, height: 350}}
           />
         </View>
@@ -49,12 +49,12 @@ export default function SignUpScreen() {
         <View className="flex-row justify-center space-x-12">
           <TouchableOpacity className="p-2 bg-gray-100 rounded-2xl">
             <Image
-              source={require('../assets/img/gg.png')}
+              source={require('../../assets/img/gg.png')}
               className="w-10 h-10"></Image>
           </TouchableOpacity>
           <TouchableOpacity className="p-2 bg-gray-100 rounded-2xl">
             <Image
-              source={require('../assets/img/fb.png')}
+              source={require('../../assets/img/fb.png')}
               className="w-10 h-10"></Image>
           </TouchableOpacity>
         </View>

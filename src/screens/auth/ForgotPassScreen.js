@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 
 import auth from "@react-native-firebase/auth"
 import { useNavigation } from "@react-navigation/native";
-import { getApiNoneToken } from "../api/CallApi";
+import { getApiNoneToken } from "../../api/CallApi";
 
 export default function ForgotPassScreen(){
     const [phoneNumber,setPhoneNumber] = useState('')

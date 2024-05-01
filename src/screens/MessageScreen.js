@@ -20,7 +20,7 @@ import {setConversations} from '../features/conversation/conversationSlice';
 import {useDispatch} from 'react-redux';
 import {getApiapiConversation} from '../api/CallApi';
 
-export default function HomeChatScreen() {
+export default function MessageScreen() {
   const [searchText, setSearchText] = useState('');
   const [avt, setAvt] = useState('');
   const [name, setName] = useState('');
@@ -147,7 +147,6 @@ export default function HomeChatScreen() {
     try {
       const participantIds = selectedMembers.map(member => member.id); // Lấy ra mảng các id của các thành viên được chọn
       participantIds.push(currentUser._id);
-      const id = currentUser._id;
       // console.log("kk",participantIds)
       if (participantIds.length < 3) {
         Alert.alert('Cần chọn ít nhất 2 thành viên để tạo nhóm');
@@ -160,7 +159,6 @@ export default function HomeChatScreen() {
       const respone = await postApiapiConversation('/createGroup', {
         groupName: groupName,
         participants: participantIds,
-        idAdmin: id,
       });
       console.log('data', respone.data.participants);
 
@@ -185,7 +183,7 @@ export default function HomeChatScreen() {
       console.log('error fetchDataConversations', error);
     }
   }
-
+  
 
   return (
     <View style={{flex: 1}}>
@@ -288,7 +286,7 @@ export default function HomeChatScreen() {
 
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ScrollView>
-          {/* <ListConversation conversations={conversations}></ListConversation> */}
+          <ListConversation conversations={conversations}></ListConversation>
         </ScrollView>
       </View>
 

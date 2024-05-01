@@ -54,7 +54,7 @@ export default function PhoneNumberScreen() {
       </View>
       <View className="flex-row justify-center mt-0 ">
         <Image
-          source={require('../assets/img/phone.jpg')}
+          source={require('../../assets/img/phone.jpg')}
           style={{width: 200, height: 200}}
         />
       </View>
@@ -78,7 +78,7 @@ export default function PhoneNumberScreen() {
               color={'#000'}
             />
             <Image
-              source={require('../assets/img/vietnam-flag.png')}
+              source={require('../../assets/img/vietnam-flag.png')}
               style={{width: 40, height: 30}}
             />
             <Text className="text-sm font-bold text-gray-800">+84</Text>

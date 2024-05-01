@@ -37,7 +37,7 @@ export default function OTP({navigation,route}) {
       <View className="flex-row justify-center ml-20 mt-16 bg-white">
         <StatusBar hidden />
         <Image
-          source={require('../assets/img/phone.jpg')}
+          source={require('../../assets/img/phone.jpg')}
           style={{width: 250, height: 250, resizeMode: 'contain'}}
         />
         <Text className="text-white font-bold text-4xl text-center">OTP</Text>

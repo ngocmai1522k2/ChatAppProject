@@ -15,10 +15,10 @@ import {
   getApiNoneToken,
   postApiNoneToken,
   putApiNoneToken,
-} from '../api/CallApi';
+} from '../../api/CallApi';
 import {useSelector} from 'react-redux';
-import ListFriend from '../components/ListFriend';
-import {addFriend} from '../features/user/userSlice';
+import ListFriend from '../../components/ListFriend';
+import {addFriend} from '../../features/user/userSlice';
 import {useDispatch} from 'react-redux';
 
 export default function Contact() {
@@ -141,7 +141,7 @@ export default function Contact() {
           {inviteList.map((item, id) => (
             <View key={id} style={styles.inviteContainer}>
               <Image
-                source={avt ? {uri: avt} : require('../assets/img/codon.jpg')}
+                source={avt ? {uri: avt} : require('../../assets/img/codon.jpg')}
                 style={styles.avatar}
               />
               <View style={styles.inviteDetails}>

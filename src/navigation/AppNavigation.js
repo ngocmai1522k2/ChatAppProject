@@ -6,13 +6,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
-import LoginScreen from '../screens/LoginScreen';
-import SignUpScreen from '../screens/SignUpScreen';
-import PhoneNumberScreen from '../screens/PhoneNumberScreen';
-import OTP from '../screens/OTP';
-import ForgotPassScreen from '../screens/ForgotPassScreen';
-import NewPasswordScreen from '../screens/NewPasswordScreen';
+import LoginScreen from '../screens/auth/LoginScreen';
+import SignUpScreen from '../screens/auth/SignUpScreen';
+import PhoneNumberScreen from '../screens/auth/PhoneNumberScreen';
+import OTP from '../screens/auth/OTP';
+import ForgotPassScreen from '../screens/auth/ForgotPassScreen';
+import NewPasswordScreen from '../screens/auth/NewPasswordScreen';
 import HomeChat from './HomeChat';
+import ChatScreen from '../screens/chat/ChatScreen';
+import MenuChat from '../screens/chat/MenuChat';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +31,8 @@ function AppNavigation() {
         <Stack.Screen name="ForgotPassScreen" options={{headerTitle:"",headerStyle:{backgroundColor:"#BEBDB8"}}} component={ForgotPassScreen} />
         <Stack.Screen name="NewPasswordScreen" options={{headerTitle:"",headerStyle:{backgroundColor:"#BEBDB8"}}} component={NewPasswordScreen} />
         <Stack.Screen name="HomeChat" options={{headerShown: false}} component={HomeChat} />
+        <Stack.Screen name="ChatScreen" options={{headerShown: false}} component={ChatScreen} />
+        <Stack.Screen name="MenuChat" options={{headerShown: false}} component={MenuChat} />
       
       </Stack.Navigator>
     </NavigationContainer>

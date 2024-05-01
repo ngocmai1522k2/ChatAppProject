@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { getApiNoneToken, putApiNoneToken } from '../api/CallApi';
+import { getApiNoneToken, putApiNoneToken } from '../../api/CallApi';
 
 const NewPasswordScreen = ({navigation,route}) => {
   const {id} = route.params
