@@ -34,6 +34,7 @@ function AppNavigation() {
         <Stack.Screen name="ChatScreen" options={{headerShown: false}} component={ChatScreen} />
         <Stack.Screen name="MenuChat" options={{headerShown: false}} component={MenuChat} />
       
+
       </Stack.Navigator>
     </NavigationContainer>
   );

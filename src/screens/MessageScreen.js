@@ -149,7 +149,7 @@ export default function MessageScreen() {
       participantIds.push(currentUser._id);
       // console.log("kk",participantIds)
       if (participantIds.length < 3) {
-        Alert.alert('Cần chọn ít nhất 2 thành viên để tạo nhóm');
+        Alert.alert('chọn ít nhất 2 thành viên để tạo nhóm');
         return;
       }
       if (groupName == '') {
@@ -159,10 +159,22 @@ export default function MessageScreen() {
       const respone = await postApiapiConversation('/createGroup', {
         groupName: groupName,
         participants: participantIds,
+        admin: currentUser._id,
       });
       console.log('data', respone.data.participants);
 
-      Alert.alert('Tạo nhóm ' + groupName + ' thành công');
+      Alert.alert(
+        'Xác nhận',
+        'Tạo nhóm thành công',
+        [
+          {
+            text: 'Oke',
+            style: 'cancel',
+          },
+        
+        ],
+        { cancelable: false }
+      );
       updateConversations();
       setGroupName('');
       setSelectedMembers([]); // Reset slect sau khi tạo nhóm thành công
