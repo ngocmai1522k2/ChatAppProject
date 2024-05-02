@@ -14,7 +14,7 @@ const MenuChat = ({route, navigation}) => {
   const {infor} = route.params;
   const participants = infor.participants;
   const [showMemberList, setShowMemberList] = useState(false);
-
+  
 
   
 
@@ -28,6 +28,8 @@ const MenuChat = ({route, navigation}) => {
   const [selectMembersRemove,setSelectMemberRemove]=useState([])
   const [showRemoveMemberModal,setShowRemoveMemberModal] = useState(false)
  
+  const isAdmin = infor.idAdmin === currentUser._id; // Kiểm tra xem người dùng hiện tại có phải là quản trị viên không
+
  
 
   // Lọc ra các thành viên mới từ currentUser.phoneBooks không có trong participants
@@ -180,6 +182,8 @@ const MenuChat = ({route, navigation}) => {
     Alert.alert("Xác nhân","thêm thành viên thành công")
     setSelectedMembers([])
     setShowAddMemberModal(false)
+    navigation.navigate("MessageScreen");
+    
     
    } catch (error) {
     console.log("lỗi thêm thành viên",error)
@@ -209,6 +213,7 @@ const MenuChat = ({route, navigation}) => {
        Alert.alert("Xác nhân","xóa thành viên thành công")
        setSelectMemberRemove([])
        setShowRemoveMemberModal(false)
+       navigation.navigate("MessageScreen");
        
       } catch (error) {
        console.log("lỗi xóa thành viên",error)
@@ -281,7 +286,9 @@ const MenuChat = ({route, navigation}) => {
               Tìm{'\n'} tin nhắn
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity className="flex-col p-3 items-center"   onPress={() => setShowAddMemberModal(true)} style={styles.addButton}>
+          <TouchableOpacity className="flex-col p-3 items-center"   onPress={() => setShowAddMemberModal(true)} 
+          disabled={!isAdmin}
+          style={styles.addButton}>
             <Icon name="addusergroup" size={25} color={'#888'} />
             <Text className="text-gray-700  text-center" style={styles.addButtonText}>
               Thêm{'\n'} thành viên
@@ -289,7 +296,8 @@ const MenuChat = ({route, navigation}) => {
           </TouchableOpacity>
           {renderAddMemberModal()}
 
-          <TouchableOpacity className="flex-col p-3 items-center "   onPress={() => setShowRemoveMemberModal(true)}>
+          <TouchableOpacity className="flex-col p-3 items-center "   onPress={() => setShowRemoveMemberModal(true)} 
+          disabled={!isAdmin} >
             <Icon name="deleteuser" size={25} color={'#888'} />
             <Text className="text-gray-700  text-center">
               Xóa{'\n'}
@@ -302,7 +310,7 @@ const MenuChat = ({route, navigation}) => {
       
        
 
-          <TouchableOpacity className="flex-col p-3 items-center"  onPress={removeGroup}>
+          <TouchableOpacity className="flex-col p-3 items-center"  onPress={removeGroup} disabled={!isAdmin}>
             <Icon name="delete" size={25} color={'#888'} />
             <Text className="text-gray-700  text-center">Xóa{'\n'} nhóm</Text>
           </TouchableOpacity>
@@ -323,7 +331,7 @@ const MenuChat = ({route, navigation}) => {
           
         </ScrollView>
       )}
-      <OptionsGroup infor={infor}></OptionsGroup>
+      <OptionsGroup infor={infor} navigation={navigation}></OptionsGroup>
     </ScrollView>
   );
 };
