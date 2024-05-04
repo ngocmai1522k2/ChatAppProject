@@ -36,7 +36,7 @@ const logOutGroup= async()=>{
         {
           text:"Ok",
           onPress: async()=>{
-
+        
 
             const respone = await postApiapiConversation("/removeParticipant",{
               conversationId:infor._id,
@@ -56,14 +56,14 @@ const logOutGroup= async()=>{
             updateConversations();
             navigation.navigate("MessageScreen");
 
-
+            
           }
         },
         {text:"Cancel",style:"cancel"}
       ]
     )}
     else(
-
+      
       Alert.alert(
       "Xác nhận","Bạn có chắc muốn rời nhóm",[
         {

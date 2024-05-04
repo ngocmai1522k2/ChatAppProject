@@ -14,7 +14,7 @@ const MenuChat = ({route, navigation}) => {
   const {infor} = route.params;
   const participants = infor.participants;
   const [showMemberList, setShowMemberList] = useState(false);
-
+  
 
   
 
