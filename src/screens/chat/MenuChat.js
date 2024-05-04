@@ -105,7 +105,7 @@ const MenuChat = ({route, navigation}) => {
               </TouchableOpacity>
             
             ))}
-            {console.log("danh sach nguoi duoc chon de them",selectedMembers)}
+            {/* {console.log("danh sach nguoi duoc chon de them",selectedMembers)} */}
            
             
           </ScrollView>
@@ -142,7 +142,7 @@ const MenuChat = ({route, navigation}) => {
                 <Text style={styles.memberText}>{member.name}</Text>
               </TouchableOpacity>
             ))}
-            {console.log("danh sach nguoi duoc chon de xóa",selectMembersRemove)}
+            {/* {console.log("danh sach nguoi duoc chon de xóa",selectMembersRemove)} */}
           </ScrollView>
           <TouchableOpacity onPress={() => setShowRemoveMemberModal(false)}>
             <Text style={styles.closeButton}>Đóng</Text>
@@ -162,6 +162,11 @@ const MenuChat = ({route, navigation}) => {
     const userIds = selectedMembers.map(member => member.id);
     console.log(userIds)
      // Lặp qua từng userId và gọi hàm addParticipant cho mỗi userId
+     if (userIds.length === 0) {
+      Alert.alert("Lỗi", "Vui lòng chọn ít nhất một thành viên để thêm");
+      return;
+    }
+
      userIds.forEach(async userId => {
       try {
         const response = await postApiapiConversation("/addParticipant", {
@@ -191,6 +196,10 @@ const MenuChat = ({route, navigation}) => {
        const userIds = selectMembersRemove.map(member => member._id);
        console.log("idxoa",userIds)
         // Lặp qua từng userId và gọi hàm addParticipant cho mỗi userId
+        if (userIds.length === 0) {
+          Alert.alert("Lỗi", "Vui lòng chọn ít nhất một thành viên để xóa");
+          return;
+        }
         userIds.forEach(async userId => {
          try {
            const response = await postApiapiConversation("/removeParticipant", {
