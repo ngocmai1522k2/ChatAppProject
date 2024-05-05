@@ -33,12 +33,13 @@ const NewPasswordScreen = ({navigation,route}) => {
       })
 
       console.log(updatePass.data.data)
-      alert("Đổi mật khẩu thành công")
+      Alert.alert("Xác Nhận","Đổi mật khẩu thành công")
       navigation.navigate("Login")
       
     
     } else {
       // Hiển thị thông báo lỗi nếu mật khẩu nhập lại không khớp
+      Alert.alert("Thông báo","Mật khẩu không khớp")
       console.log('Mật khẩu nhập lại không khớp');
     }
   };

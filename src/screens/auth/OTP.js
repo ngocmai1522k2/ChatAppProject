@@ -14,7 +14,7 @@ export default function OTP({navigation,route}) {
       try{
           const userCredential = await confirmCode.confirm(code);
           // alert(userCredential)
-          console.log(userCredential.user)
+          // console.log(userCredential.user)
 
           // const user = userCredential.user;
           // check if user is new or existing
