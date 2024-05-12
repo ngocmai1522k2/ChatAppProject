@@ -98,7 +98,7 @@ export default function LoginScreen() {
         </View>
         <View className="flex-row justify-center mt-3">
           <Text className="text-gray-700 text-sm">Don't have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+          <TouchableOpacity onPress={() => navigation.navigate('PhoneNumber')}>
             <Text className="text-blue-900 text-sm font-semibold">  Sign Up</Text>
           </TouchableOpacity>
         </View>

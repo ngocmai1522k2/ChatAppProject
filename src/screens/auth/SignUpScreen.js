@@ -1,71 +1,254 @@
-import {View, TouchableOpacity, Text, Image, TextInput} from 'react-native';
-import React from 'react';
+import {View, TouchableOpacity, Text, Image, Button,TextInput,StyleSheet, Alert} from 'react-native';
+import React, { useState } from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
+import { postApiNoneToken } from '../../api/CallApi';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function SignUpScreen() {
+
+
+
+export default function SignUpScreen({route}) {
+  const {sdt} = route.params
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('@gmail.com');
+  const [phone, setPhone] = useState(sdt);
+  const [gender, setGender] = useState(false); // Default is male
+  const [dateOfBirth, setDateOfBirth] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [password, setPassword] = useState('0345641602Nvv!');
+  const [confirmPassword, setConfirmPassword] = useState('0345641602Nvv!');
   const navigation = useNavigation();
+
+  //regex và các hằng số
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const nameRegex = /^[a-zA-Z\s_-]+$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
+
+  const isValidEmail = emailRegex.test(email);
+  const isValidName = nameRegex.test(name);
+  const isValidPassword = passwordRegex.test(password);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || dateOfBirth;
+    setShowDatePicker(false);
+    setDateOfBirth(currentDate);
+  };
+
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+  };
+
+  const regex = () => {
+    if (!isValidName) {
+      Alert.alert("Thông Báo", "Họ và tên không hợp lệ");
+      return;
+    }
+    if (!isValidEmail) {
+      Alert.alert("Thông Báo", "Email không hợp lệ");
+      return;
+    }
+    if (!isValidPassword) {
+      Alert.alert("Thông Báo", "Mật khẩu phải có 10 kí tự, bao gồm số, chữ thường, chữ hoa và kí tự đặc biệt ");
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert("Thông Báo", "Mật khẩu không trùng khớp");
+      return;
+    }
+    SignUp();
+  };
+
+  const SignUp = async () => {
+    try {
+      const respone = await postApiNoneToken("/signup", {
+        name: name,
+        username: email,
+        phone: phone,
+        gender: gender,
+        dateOfBirth: dateOfBirth,
+        password: password,
+        confirmPassword: confirmPassword
+      });
+      if (respone.data.message === "User must be at least 18 years old") {
+        Alert.alert("Thông báo", "Người dùng phải đủ 18 tuổi");
+        return;
+      }
+      if (respone.data.data) {
+        setEmail("");
+        setName("");
+        setPassword("");
+        setConfirmPassword("");
+      }
+      Alert.alert("Xác nhận", "Đăng ký thành công");
+      navigation.navigate("Login");
+    } catch (error) {
+      console.log("lôi đăng ký", error);
+    }
+  };
+
   return (
-    <View className="flex-1 bg-blue-400">
-      <SafeAreaView className="flex-1">
-        <View className="flex-row justify-start">
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            className=" h-15 w-15  my-7 mx-7  ">
-            <Icon name="arrowleft" size={30} color={'#fff'} />
-          </TouchableOpacity>
-        </View>
-        <View className="flex-row justify-center mt-11">
-          <Image
-            source={require('../../assets/img/login.png')}
-            style={{width: 350, height: 350}}
-          />
-        </View>
-      </SafeAreaView>
-      <View
-        className="flex-1 bg-white px-8 pt-8"
-        style={{
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-        }}>
-        <View className="form space-y-2">
-          <Text className="text-gray-700 ml-4 text-lg">Email address: </Text>
-          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3" />
-          <Text className="text-gray-700 ml-4 text-lg">Password: </Text>
-          <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3" />
-        </View>
-        <TouchableOpacity className="flex items-end mb-5">
-          <Text className="text-gray-700">Forgot Password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="flex py-4 bg-blue-500 rounded-2xl mb-1 ">
-          <Text className="text-center text-white text-lg font-semibold">
-            Login
-          </Text>
-        </TouchableOpacity>
-        <Text className="text-center text-gray-800 text-xl mt-1 font-semibold">
-          Or
-        </Text>
-        <View className="flex-row justify-center space-x-12">
-          <TouchableOpacity className="p-2 bg-gray-100 rounded-2xl">
-            <Image
-              source={require('../../assets/img/gg.png')}
-              className="w-10 h-10"></Image>
-          </TouchableOpacity>
-          <TouchableOpacity className="p-2 bg-gray-100 rounded-2xl">
-            <Image
-              source={require('../../assets/img/fb.png')}
-              className="w-10 h-10"></Image>
-          </TouchableOpacity>
-        </View>
-        <View className="flex-row justify-center mt-3">
-          <Text className="text-gray-700 text-sm">Don't have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('PhoneNumber')}>
-            <Text className="text-blue-900 text-sm font-semibold">  Sign Up</Text>
-          </TouchableOpacity>
-        </View>
-        <View className="flex-row justify-center"></View>
+    <SafeAreaView style={styles.container}>
+        {/* <TouchableOpacity onPress={navigation.navigate("Login")}>
+          <Icon name="arrowleft" size={30} color="blue" />
+        </TouchableOpacity> */}
+      <Text style={styles.title}>Nhập Thông Tin Đăng Ký</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Họ và tên</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Nhập họ và tên"
+          value={name}
+          onChangeText={setName}
+        />
       </View>
-    </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Nhập địa chỉ email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Số điện thoại</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Nhập số điện thoại"
+          value={phone}
+          onChangeText={setPhone}
+          keyboardType="phone-pad"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Giới tính</Text>
+        <View style={styles.radioContainer}>
+          <TouchableOpacity
+            style={[styles.radioOption, gender === true && styles.selectedOption]}
+            onPress={() => setGender(true)}
+          >
+            <Text style={styles.optionText}>Nam</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.radioOption, gender === false && styles.selectedOption]}
+            onPress={() => setGender(false)}
+          >
+            <Text style={styles.optionText}>Nữ</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Ngày sinh</Text>
+        <TouchableOpacity onPress={showDatepicker} style={styles.datePickerButton}>
+          <Text>Chọn ngày sinh</Text>
+        </TouchableOpacity>
+        {showDatePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={dateOfBirth}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+          />
+        )}
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Mật khẩu</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Nhập mật khẩu"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Xác nhận mật khẩu</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Nhập lại mật khẩu"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+        />
+      </View>
+      <TouchableOpacity onPress={regex} style={styles.submitButton}>
+        <Text style={styles.submitButtonText}>Đăng Ký</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 15,
+  },
+  label: {
+    marginBottom: 5,
+    fontWeight: 'bold',
+  },
+  input: {
+    width: '100%',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
+  radioContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  radioOption: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginRight: 10,
+  },
+  selectedOption: {
+    backgroundColor: '#0099FF',
+  },
+  optionText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  datePickerButton: {
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: 'pink',
+    borderRadius: 5,
+  },
+  submitButton: {
+    borderWidth: 1,
+    borderRadius: 15,
+    borderColor: 'black',
+    width: 100,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'pink',
+    marginTop: 10,
+  },
+  submitButtonText: {
+    fontSize: 18,
+    color: 'black',
+  },
+});
