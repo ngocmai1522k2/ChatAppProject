@@ -10,6 +10,10 @@ const store =  configureStore({
         conversation: conversationReducer,
         messages: messagesReducer,
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        immutableCheck: false,
+        serializableCheck: false,
+      }),
     });
 
 export default store;

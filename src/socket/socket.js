@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 let socket;
-const baseURL = 'http://10.0.10.156:3001';
+const baseURL = 'http://192.168.1.4:3001';
 const initiateSocket = userId => {
   socket = io(baseURL, {
     transports: ['websocket'],
