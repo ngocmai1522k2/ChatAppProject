@@ -15,6 +15,7 @@ import NewPasswordScreen from '../screens/auth/NewPasswordScreen';
 import HomeChat from './HomeChat';
 import ChatScreen from '../screens/chat/ChatScreen';
 import MenuChat from '../screens/chat/MenuChat';
+import SingleChatScreen from '../screens/chat/SingleChatScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,7 @@ function AppNavigation() {
         <Stack.Screen name="NewPasswordScreen" options={{headerTitle:"",headerStyle:{backgroundColor:"#BEBDB8"}}} component={NewPasswordScreen} />
         <Stack.Screen name="HomeChat" options={{headerShown: false}} component={HomeChat} />
         <Stack.Screen name="ChatScreen" options={{headerShown: false}} component={ChatScreen} />
+        <Stack.Screen name="SingleChatScreen" options={{headerShown: false}} component={SingleChatScreen} />
         <Stack.Screen name="MenuChat" options={{headerShown: false}} component={MenuChat} />
       
 
