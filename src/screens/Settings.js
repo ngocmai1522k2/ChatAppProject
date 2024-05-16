@@ -61,6 +61,7 @@ export default function Settings() {
       setEmail(currentUser.username);
       setPhone(currentUser.phone);
       setAvatar(currentUser.avatar);
+      console.log('avatar current: ', avatar);
       setIsEditing(false);
 
     }
@@ -166,7 +167,7 @@ export default function Settings() {
       formData.append('file', {
         uri: imageSource.path,
         type: imageSource.mime,
-        name: `${currentUser.username}.${imageSource.mime.split('/')[1]}`,
+        name: `${currentUser._id}.${imageSource.mime.split('/')[1]}`,
       });
   
       try {
@@ -176,11 +177,12 @@ export default function Settings() {
           },
         });
         if (response.status === 200 && response.data.data) {
-          Alert.alert('Thành công', 'Tải ảnh đại diện thành công');
+          // Alert.alert('Thành công', 'Tải ảnh đại diện thành công');
           console.log('image uploaded: ', response.data.data.url);
           setAvatar(response.data.data.url);
           console.log('avatar: ', avatar);
           setImageSource(null);
+          dispatch(setUserAvatar(response.data.data.url));
         } else {
           Alert.alert('Thất bại', 'Tải ảnh đại diện thất bại');
         }
@@ -191,10 +193,21 @@ export default function Settings() {
     }
   };
   const takePhotos = () => {
-    // Code to take photo from camera goes here
-    // After taking photo, update the imageSource state
-    // Example code:
-    // setImageSource(response);
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      console.log(image);
+      setImageSource({
+        // Set the image object directly
+        path: image.path,
+        mime: image.mime,
+        data: image.data, // Base64 data
+      });
+      setOriginalImageSource({uri: image.path});
+      console.log('image source: ', image);
+    });
   };
 
   const closeModal = () => {
