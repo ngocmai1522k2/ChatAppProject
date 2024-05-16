@@ -30,7 +30,7 @@ export default function PhoneNumberScreen() {
     // Handle the button press
     const signInWithPhoneNumber = async()=>{
       try{
-          const confirmmation = await auth().signInWithPhoneNumber(phoneNumber);
+          const confirmmation = await auth().signInWithPhoneNumber("+84"+phoneNumber);
           // const confirmmation = "NVV"
           setConfirm(confirmmation);
           console.log(confirmmation)
@@ -39,7 +39,7 @@ export default function PhoneNumberScreen() {
 
           
       }catch(error){
-          alert("invalid your phoneNumber")
+          Alert.alert("invalid your phoneNumber")
           console.log("Error sending code",error)
       }
   };

@@ -7,7 +7,6 @@ import { getApiapiConversation, postApiNoneToken } from '../../api/CallApi';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '../../features/user/userSlice';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 
 export default function LoginScreen() {
@@ -24,6 +23,7 @@ export default function LoginScreen() {
           username:email,
           password: pass
         })
+        
         const user = respone.data.userLogin;
         dispatch(setCurrentUser(user))
         console.log("user",user)
