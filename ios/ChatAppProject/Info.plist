@@ -40,6 +40,10 @@
   	<string>This app would like to access your photos</string>
 	<key>NSMicrophoneUsageDescription</key>
   	<string>This app required your microphone</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>MaterialIcons.ttf</string>
+	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>

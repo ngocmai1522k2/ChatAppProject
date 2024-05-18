@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { fetchMessages } from '../features/messages/messagesSlice';
+import { fetchGroupMessages } from '../features/messages/messagesSlice';
 
 const ListConversation = ({conversations}) => {
   const navigation = useNavigation();
@@ -14,8 +15,10 @@ const ListConversation = ({conversations}) => {
     if (item.groupName === "") {
       const receiver = item.participants.find(participant => participant._id !== currentUser._id);
       dispatch(fetchMessages({ senderId: currentUser._id, receiverId: receiver._id }));
+      
       navigation.navigate('SingleChatScreen', {conversation: item});
     } else {
+      dispatch(fetchGroupMessages({ conversationId: item._id }));
       navigation.navigate('ChatScreen', {conversation: item});
     }
   };

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getApiMessageNoneToken } from '../../api/CallApi';
+import { getApiMessageNoneToken, getApiapiConversation } from '../../api/CallApi';
 import { postApiMessageNoneToken } from '../../api/CallApi';
 import { setCurrentUser } from '../user/userSlice';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
@@ -9,6 +9,7 @@ const fetchMessagesFromApi = async (senderId, receiverId) => {
   const response = await getApiMessageNoneToken(
     '/getMessages/' + receiverId + '?senderId=' + senderId,
   );
+  console.log('response', response.data);
   return response.data;
 };
 
@@ -16,6 +17,21 @@ export const fetchMessages = createAsyncThunk(
   'messages/fetchMessages',
   async ({ senderId, receiverId }) => {
     return fetchMessagesFromApi(senderId, receiverId);
+  },
+);
+
+const fetchGroupMessagesFromApi = async (conversationId) => {
+  const response = await getApiapiConversation(
+    '/getGroupMessages/' + conversationId,
+  );
+  console.log('response Group messages: ', response.data.messages);
+  return response.data.messages;
+};
+
+export const fetchGroupMessages = createAsyncThunk(
+  'messages/fetchGroupMessages',
+  async ({ conversationId }) => {
+    return fetchGroupMessagesFromApi(conversationId);
   },
 );
 
@@ -49,16 +65,13 @@ const messagesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchMessages.pending, (state, action) => {
-        state.status = 'loading';
-      })
       .addCase(fetchMessages.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.messages = action.payload;
       })
-      .addCase(fetchMessages.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
+      .addCase(fetchGroupMessages.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.messages = action.payload;
       });
   },
 });

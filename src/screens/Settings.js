@@ -19,12 +19,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {useDispatch} from 'react-redux';
 import {setCurrentUser, setUserAvatar} from '../features/user/userSlice';
 import {putApiNoneToken} from '../api/CallApi';
-import {uploadAvatar} from '../api/CallApi';
+import {uploadFile} from '../api/CallApi';
 import ImagePicker from 'react-native-image-crop-picker';
 const FormData = require('form-data');
 
 export default function Settings() {
   const currentUser = useSelector(state => state.user.currentUser);
+  
   const [modalVisible, setModalVisible] = useState(false);
   const [originalImageSource, setOriginalImageSource] = useState(
     currentUser.avatar
@@ -65,7 +66,7 @@ export default function Settings() {
       setIsEditing(false);
 
     }
-  }, [isEditing, currentUser, avatar]);
+  }, [isEditing, currentUser]);
 
   const saveChanges = async () => {
     if (name === '' || formattedDob === '' || email === '' || phone === '') {
@@ -110,8 +111,9 @@ export default function Settings() {
       console.log('user update thành công : ', respone.data);
       Alert.alert('Thông báo', 'Cập nhật thông tin thành công');
     }
-    setEditModalVisible(false);
     setIsEditing(true);
+    setEditModalVisible(false);
+    
     // Call API to save changes
   };
 
@@ -132,7 +134,6 @@ export default function Settings() {
       includeBase64: true,
       cropperCircleOverlay: true,
       avoidEmptySpaceAroundImage: true,
-      freeStyleCropEnabled: true,
     })
       .then(image => {
         if (!supportedMimeTypes.includes(image.mime)) {
@@ -171,7 +172,7 @@ export default function Settings() {
       });
   
       try {
-        const response = await uploadAvatar('/uploadAvatar', formData, {
+        const response = await uploadFile('/uploadAvatar', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -180,9 +181,7 @@ export default function Settings() {
           // Alert.alert('Thành công', 'Tải ảnh đại diện thành công');
           console.log('image uploaded: ', response.data.data.url);
           setAvatar(response.data.data.url);
-          console.log('avatar: ', avatar);
           setImageSource(null);
-          dispatch(setUserAvatar(response.data.data.url));
         } else {
           Alert.alert('Thất bại', 'Tải ảnh đại diện thất bại');
         }
