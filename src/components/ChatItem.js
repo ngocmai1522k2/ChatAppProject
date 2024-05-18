@@ -10,7 +10,7 @@ import {
 import {extractTime} from '../components/extractTime/extracTime';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ChatItem = ({currentUserId, senderId, receiver, message}) => {
+const ChatItem = ({currentUserId, senderId, receiver, message, isGroupChat}) => {
   const alignStyle = senderId === currentUserId ? 'flex-end' : 'flex-start';
   const imageSource = senderId === currentUserId ? null : receiver.avatar;
 
@@ -57,6 +57,10 @@ const ChatItem = ({currentUserId, senderId, receiver, message}) => {
 
   return (
     <View style={{flex: 1, margin: 10, alignItems: alignStyle}}>
+       {/* Hiển thị tên người nhận chỉ khi là nhóm chat */}
+      {isGroupChat && senderId !== currentUserId && (
+        <Text style={styles.receiverName}>{receiver.name}</Text>
+      )}
       <View style={{flexDirection: 'row'}}>
         {imageSource && (
           <Image
@@ -172,6 +176,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 5,
     color: 'black',
+  },
+  receiverName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: 'gray',
   },
 });
 

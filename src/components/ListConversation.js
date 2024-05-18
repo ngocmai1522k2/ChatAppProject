@@ -16,10 +16,10 @@ const ListConversation = ({conversations}) => {
       const receiver = item.participants.find(participant => participant._id !== currentUser._id);
       dispatch(fetchMessages({ senderId: currentUser._id, receiverId: receiver._id }));
       
-      navigation.navigate('SingleChatScreen', {conversation: item});
+      navigation.navigate('SingleChatScreen', {conversation: item, isGroupChat: false});
     } else {
       dispatch(fetchGroupMessages({ conversationId: item._id }));
-      navigation.navigate('ChatScreen', {conversation: item});
+      navigation.navigate('ChatScreen', {conversation: item, isGroupChat: true});
     }
   };
 

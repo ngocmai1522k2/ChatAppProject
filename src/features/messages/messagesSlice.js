@@ -1,10 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getApiMessageNoneToken, getApiapiConversation } from '../../api/CallApi';
 import { postApiMessageNoneToken } from '../../api/CallApi';
-import { setCurrentUser } from '../user/userSlice';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
-
+// Fetch individual messages from API
 const fetchMessagesFromApi = async (senderId, receiverId) => {
   const response = await getApiMessageNoneToken(
     '/getMessages/' + receiverId + '?senderId=' + senderId,
@@ -13,6 +11,7 @@ const fetchMessagesFromApi = async (senderId, receiverId) => {
   return response.data;
 };
 
+// Async thunk to fetch individual messages
 export const fetchMessages = createAsyncThunk(
   'messages/fetchMessages',
   async ({ senderId, receiverId }) => {
@@ -20,6 +19,7 @@ export const fetchMessages = createAsyncThunk(
   },
 );
 
+// Fetch group messages from API
 const fetchGroupMessagesFromApi = async (conversationId) => {
   const response = await getApiapiConversation(
     '/getGroupMessages/' + conversationId,
@@ -28,6 +28,7 @@ const fetchGroupMessagesFromApi = async (conversationId) => {
   return response.data.messages;
 };
 
+// Async thunk to fetch group messages
 export const fetchGroupMessages = createAsyncThunk(
   'messages/fetchGroupMessages',
   async ({ conversationId }) => {
@@ -35,22 +36,11 @@ export const fetchGroupMessages = createAsyncThunk(
   },
 );
 
-// export const addMessage = createAsyncThunk(
-//   'messages/addMessage',
-//   async ({ senderId, receiverId, message }) => {
-//     const response = await postApiMessageNoneToken(
-//       '/sendMessage/' + receiverId,
-//       { message: message,
-//         userId: senderId}
-//     );
-//     return response.data;
-//   },
-// );
-
 const messagesSlice = createSlice({
   name: 'messages',
   initialState: {
-    messages: [],
+    messages: [], // State for individual messages
+    groupMessages: [], // State for group messages
     status: 'idle',
     error: null,
   },
@@ -61,7 +51,12 @@ const messagesSlice = createSlice({
     getMessages: (state, action) => {
       state.messages = action.payload;
     },
-
+    addGroupMessage: (state, action) => {
+      state.groupMessages.push(action.payload);
+    },
+    getGroupMessages: (state, action) => {
+      state.groupMessages = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -71,11 +66,27 @@ const messagesSlice = createSlice({
       })
       .addCase(fetchGroupMessages.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.messages = action.payload;
+        state.groupMessages = action.payload;
+      })
+      .addCase(fetchMessages.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchMessages.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(fetchGroupMessages.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchGroupMessages.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
       });
   },
 });
 
-export const { addMessage, getMessages} = messagesSlice.actions;
+// Export actions
+export const { addMessage, getMessages, addGroupMessage, getGroupMessages } = messagesSlice.actions;
 
+// Export reducer
 export default messagesSlice.reducer;

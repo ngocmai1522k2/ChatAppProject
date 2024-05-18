@@ -4,19 +4,19 @@ import axios from 'axios'
 var api = axios.create({
     // IP của PC
 
-    baseURL:'http://172.22.146.238:3001/api/user',
+    baseURL:'http://192.168.43.219:3001/api/user',
     // withCredentials: true 
     // baseURL:'http://192.168.1.13:3001/api/user'
 })
 
 var apiMessage = axios.create({
-    baseURL:'http://172.22.146.238:3001/api/messages'
+    baseURL:'http://192.168.43.219:3001/api/messages'
     // baseURL:'http://
 })
 
 
 var apiConversation = axios.create({
-    baseURL:'http://172.22.146.238:3001/api/conversations'
+    baseURL:'http://192.168.43.219:3001/api/conversations'
     // baseURL:'http://
 })
 

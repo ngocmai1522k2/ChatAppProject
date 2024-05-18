@@ -26,6 +26,7 @@ import DocumentPicker from 'react-native-document-picker';
 const SingleChatScreen = ({route, navigation}) => {
   const currentUser = useSelector(state => state.user.currentUser);
   const {conversation} = route.params;
+  const {isGroupChat} = route.params;
   const messages = useSelector(state => state.messages.messages);
   const [message, setMessage] = useState('');
   const [imageSource, setImageSource] = useState(null);
@@ -283,6 +284,7 @@ const SingleChatScreen = ({route, navigation}) => {
                 senderId={message.senderId}
                 receiver={receiver}
                 message={message}
+                isGroupChat={isGroupChat}
               />
             </View>
           ))}
