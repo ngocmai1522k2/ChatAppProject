@@ -21,11 +21,12 @@ import {setCurrentUser, setUserAvatar} from '../features/user/userSlice';
 import {putApiNoneToken} from '../api/CallApi';
 import {uploadFile} from '../api/CallApi';
 import ImagePicker from 'react-native-image-crop-picker';
+import { useNavigation } from '@react-navigation/native';
 const FormData = require('form-data');
 
 export default function Settings() {
   const currentUser = useSelector(state => state.user.currentUser);
-  
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [originalImageSource, setOriginalImageSource] = useState(
     currentUser.avatar
@@ -237,7 +238,7 @@ export default function Settings() {
             </TouchableOpacity>
           </View>
           <View className="flex-1 items-end h-24">
-            <TouchableOpacity className="h-15 w-15 my-1 mx-1">
+            <TouchableOpacity className="h-15 w-15 my-1 mx-1"  onPress={()=>navigation.navigate("Welcome")}>
               <IonIcon name="log-out-outline" size={40} color={'#2196F3'} />
             </TouchableOpacity>
           </View>
