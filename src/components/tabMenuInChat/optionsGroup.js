@@ -100,15 +100,33 @@ const transferAdmin = async (newAdminId) => {
     setModalVisible(false);
     updateConversations();
     // navigation.navigate("ChatScreen");
+    navigation.navigate("MessageScreen");
   } catch (error) {
     console.log('error transfer admin', error);
     Alert.alert("Lỗi", "Không thể chuyển trưởng nhóm");
   }
 };
+const confirmTransferAdmin = (item) => {
+  Alert.alert(
+    "Xác nhận",
+    `Bạn có chắc chắn muốn chuyển trưởng nhóm cho ${item.name}?`,
+    [
+      {
+        text: "Hủy",
+        style: "cancel"
+      },
+      {
+        text: "Đồng ý",
+        onPress: () => transferAdmin(item._id)
+      }
+    ],
+    { cancelable: false }
+  );
+};
 
 const renderParticipantItem = ({ item }) => (
   <TouchableOpacity 
-    onPress={() => transferAdmin(item._id)}
+   onPress={() => confirmTransferAdmin(item)}
     style={{ padding: 10, borderBottomWidth: 1, borderColor: '#ccc',flexDirection:'row' }}
   >
     <Image source={item.avatar ? {uri: item.avatar} : require('../../assets/img/codon.jpg')}
