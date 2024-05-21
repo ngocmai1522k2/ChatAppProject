@@ -20,6 +20,8 @@ const MenuChat = ({route, navigation}) => {
 
   
 
+  
+
   // console.log('participants', participants);
   const currentUser = useSelector(state => state.user.currentUser);
   const dispatch = useDispatch();
@@ -29,7 +31,7 @@ const MenuChat = ({route, navigation}) => {
   const [showRemoveMemberModal,setShowRemoveMemberModal] = useState(false)
  
   const isAdmin = infor.idAdmin === currentUser._id; // Kiểm tra xem người dùng hiện tại có phải là quản trị viên không
-
+  const filteredParticipants = participants.filter(participant => participant._id !== currentUser._id);
 
   
    // Lọc ra các thành viên mới từ currentUser.phoneBooks không có trong participants
@@ -103,12 +105,15 @@ const MenuChat = ({route, navigation}) => {
             
           </ScrollView>
           
-              <TouchableOpacity onPress={() => setShowAddMemberModal(false)}>
+             <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+             <TouchableOpacity onPress={() => setShowAddMemberModal(false)}>
                 <Text style={styles.closeButton}>Đóng</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={addMemberGroup} style={{alignItems:"flex-end"}}>
+              <TouchableOpacity onPress={addMemberGroup} >
                 <Text style={{fontSize:22,color:'black'}}>Thêm</Text>
               </TouchableOpacity>
+
+             </View>
       
         </View>
       </View>
@@ -121,7 +126,7 @@ const MenuChat = ({route, navigation}) => {
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <ScrollView>
-            {participants.map(member => (
+            {filteredParticipants.map(member => (
               <TouchableOpacity key={member.phone}  onPress={() => removeMember(member)}
                 style={
                     selectMembersRemove.includes(member)
@@ -135,12 +140,14 @@ const MenuChat = ({route, navigation}) => {
             ))}
             {console.log("danh sach nguoi duoc chon de xóa",selectMembersRemove)}
           </ScrollView>
-          <TouchableOpacity onPress={() => setShowRemoveMemberModal(false)}>
+         <View style={{flexDirection:"row",justifyContent:"space-between"}}>
+         <TouchableOpacity onPress={() => setShowRemoveMemberModal(false)}>
             <Text style={styles.closeButton}>Đóng</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={removeMemberGroup} style={{alignItems:"flex-end"}}>
-                <Text style={{fontSize:22,color:'black'}}>Xóa</Text>
+          <TouchableOpacity onPress={removeMemberGroup} style={{justifyContent:"flex-end"}}>
+                <Text style={{fontSize:22,color:'black',}}>Xóa</Text>
               </TouchableOpacity>
+         </View>
         </View>
       </View>
     </Modal>
@@ -151,7 +158,12 @@ const MenuChat = ({route, navigation}) => {
   const addMemberGroup = async()=>{
    try {
     const userIds = selectedMembers.map(member => member.id);
-    console.log(userIds)
+    console.log("cai gi day",userIds)
+    if (userIds.length === 0) {
+      Alert.alert("Lỗi", "Vui lòng chọn ít nhất một thành viên để thêm");
+      return;
+    }
+
      // Lặp qua từng userId và gọi hàm addParticipant cho mỗi userId
      userIds.forEach(async userId => {
       try {
@@ -166,7 +178,6 @@ const MenuChat = ({route, navigation}) => {
         console.error("Lỗi khi thêm thành viên:", error);
       }
     });
-    
     Alert.alert("Xác nhân","thêm thành viên thành công")
     setSelectedMembers([])
     setShowAddMemberModal(false)
@@ -351,8 +362,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'blue',
     textAlign: 'center',
-    marginTop: 10,
-    borderWidth:1,
+    // marginTop: 10,
+    // borderWidth:1,
     borderColor:"green",
     width:100
   },

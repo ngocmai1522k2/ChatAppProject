@@ -110,13 +110,15 @@ const ChatItem = ({currentUserId, senderId, receiver, message, isGroupChat}) => 
                 color="black"
               />
               <Text style={styles.fileName}>
-                {message.message.split('/').pop()}
+                {message.message.split('/').pop()} 
               </Text>
               
             </TouchableOpacity>
+          
             <Text style={styles.timestamp}>
                 {extractTime(message.createdAt)}
               </Text>
+              
           </View>
         )}
       </View>

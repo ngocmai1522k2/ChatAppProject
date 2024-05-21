@@ -295,7 +295,7 @@ export default function HomeChatScreen() {
       {searched && (
         <View
           style={{
-            marginTop: 10,
+            marginBottom: "150%",
             alignItems: 'center',
             flexDirection: 'row',
             paddingHorizontal: 10,
