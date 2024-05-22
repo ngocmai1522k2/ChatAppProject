@@ -244,7 +244,9 @@ const SingleChatScreen = ({route, navigation}) => {
           }}>
           <Icon name="arrowleft" size={30} color={'#fff'} />
         </TouchableOpacity>
-        <Image
+       <TouchableOpacity onPress={()=>navigation.navigate("FriendProfile",{friend:receiver})}>
+
+       <Image
           source={
             receiver.avatar
               ? {uri: receiver.avatar}
@@ -258,6 +260,8 @@ const SingleChatScreen = ({route, navigation}) => {
             marginLeft: 5,
           }}
         />
+
+       </TouchableOpacity>
         <Text
           style={{marginLeft: 3, fontSize: 20, color: 'white', width: '50%'}}>
           {receiver.name}

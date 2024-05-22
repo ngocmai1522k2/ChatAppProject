@@ -16,6 +16,7 @@ import HomeChat from './HomeChat';
 import ChatScreen from '../screens/chat/ChatScreen';
 import MenuChat from '../screens/chat/MenuChat';
 import SingleChatScreen from '../screens/chat/SingleChatScreen';
+import FriendProfile from '../screens/FriendProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,7 @@ function AppNavigation() {
         <Stack.Screen name="ChatScreen" options={{headerShown: false}} component={ChatScreen} />
         <Stack.Screen name="SingleChatScreen" options={{headerShown: false}} component={SingleChatScreen} />
         <Stack.Screen name="MenuChat" options={{headerShown: false}} component={MenuChat} />
+        <Stack.Screen name="FriendProfile" options={{headerShown: false}} component={FriendProfile} />
       
 
       </Stack.Navigator>
