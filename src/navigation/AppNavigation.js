@@ -4,7 +4,7 @@ import * as React from 'react';
 import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from '../screens/HomeScreen';
+import FriendScreen from  '../screens/FriendScreen'
 import WelcomeScreen from '../screens/WelcomeScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
@@ -25,7 +25,7 @@ function AppNavigation() {
       <Stack.Navigator initialRouteName='Welcome'>
         <Stack.Screen name="Welcome" options={{headerShown: false}} component={WelcomeScreen} />
         <Stack.Screen name="Login" options={{headerShown: false}} component={LoginScreen} /> 
-        <Stack.Screen name="Home" options={{headerShown: false}} component={HomeScreen} />
+        <Stack.Screen name="FriendScreen" options={{headerShown: false}} component={FriendScreen} />
         <Stack.Screen name="SignUp" options={{headerShown: false}} component={SignUpScreen} />
         <Stack.Screen name="PhoneNumber" options={{headerShown: false}} component={PhoneNumberScreen} />
         <Stack.Screen name="OTP" options={{headerShown: false}} component={OTP} />

@@ -26,14 +26,20 @@ const ListFriend = ({friends}) => {
           key={id}
           className="flex-row  py-2">
           <View className="flex-row w-11/12">
-            <Image
+           <TouchableOpacity onPress={()=>navigation.navigate("FriendScreen",{friend:item})}
+           
+           > 
+          
+           <Image
               source={
                 item.avatar
                   ? {uri: item.avatar}
                   : require('../assets/img/codon.jpg')
               }
               style={styles.avatar}
-            />
+             
+             />
+            </TouchableOpacity>
             <View className="ml-3 flex-1" >
               <Text className="text-lg text-ellipsis">{item.name}</Text>
               <Text className="text-md text-ellipsis">{item.phone}</Text>
