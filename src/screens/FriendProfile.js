@@ -43,7 +43,6 @@ import {
   
     //   }
     // }, [isEditing, currentUser]);
-  
    useEffect(() => {
     const getDetail = async () => {
       try {
@@ -63,13 +62,8 @@ import {
       getFriend.avatar
         ? {uri: getFriend.avatar}
         : require('../assets/img/codon.jpg')
-   
-  
-  
-   
-  
-  
-  
+
+        
     return (
       <ScrollView
         keyboardShouldPersistTaps="always"

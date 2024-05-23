@@ -16,7 +16,7 @@ import {useSelector} from 'react-redux';
 import moment from 'moment-timezone';
 import {useDispatch} from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { getApiNoneToken } from '../api/CallApi';
+import { getApiNoneToken,postApiNoneToken } from '../api/CallApi';
 const FormData = require('form-data');
 
 export default function FriendScreen({route}) {
@@ -76,6 +76,46 @@ export default function FriendScreen({route}) {
     getFriend.avatar
       ? {uri: getFriend.avatar}
       : require('../assets/img/codon.jpg')
+
+ // xóa bạn
+ 
+  const deleteFriend = async () => {
+    try {
+     
+      Alert.alert(
+        'Xác nhận',
+        'Bạn có chắc chắn muốn xóa bạn này không?',
+        [
+          {
+            text: 'Hủy',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'Đồng ý',
+            onPress: async () => {
+              const response = await postApiNoneToken("/deleteFriendOnApp/"+ currentUser._id,
+               {phone: friend.phone});
+              console.log('response: ', response);
+
+              const response2 = await postApiNoneToken("/deleteFriendOnApp/"+ getFriend._id,
+                {phone: currentUser.phone});
+              if (response.status === 200) {
+                Alert.alert('Thông báo', 'Xóa bạn thành công');
+                navigation.goBack();
+              } else {
+                Alert.alert('Thông báo', 'Xóa bạn thất bại');
+              }
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+   
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  }
  
 
 
@@ -130,10 +170,24 @@ export default function FriendScreen({route}) {
             
             </Text>
           </View>
-          <View className="flex-row items-center mb-3 border-cyan-600 border-2 p-3 rounded-lg">
+          <View className="flex-row items-center mb-3 border-cyan-600 border-2 p-3 rounded-lg" >
             <IonIcon name="call" size={24} color={'#2196F3'} />
             <Text className="ml-3 text-lg text-gray-800">{friend.phone}</Text>
           </View>
+
+
+
+              <TouchableOpacity onPress={deleteFriend}>
+                <View className="flex-row items-center mb-3 border-cyan-600 border-2 p-3 rounded-lg "> 
+               
+                      <IonIcon name="close-circle" size={40} color={'#2196F3'} />
+                      <Text className="text-lg text-gray-800">Xóa bạn</Text>
+           
+               </View>
+            </TouchableOpacity>
+       
+       
+       
         </View>
       </View>
 

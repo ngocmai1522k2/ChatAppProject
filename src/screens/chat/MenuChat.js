@@ -6,6 +6,7 @@ import OptionsGroup from '../../components/tabMenuInChat/optionsGroup';
 import { postApiapiConversation,getApiapiConversation } from '../../api/CallApi';
 import { useSelector } from 'react-redux';
 import {useDispatch} from 'react-redux';
+import { getApiNoneToken } from '../../api/CallApi';
 // import {setConversations} from '../features/conversation/conversationSlice';
 import { setConversations } from '../../features/conversation/conversationSlice';
 
@@ -29,14 +30,31 @@ const MenuChat = ({route, navigation}) => {
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [selectMembersRemove,setSelectMemberRemove]=useState([])
   const [showRemoveMemberModal,setShowRemoveMemberModal] = useState(false)
+  const [currentFriends, setCurrentFriends] = useState([]);
  
   const isAdmin = infor.idAdmin === currentUser._id; // Kiểm tra xem người dùng hiện tại có phải là quản trị viên không
   const filteredParticipants = participants.filter(participant => participant._id !== currentUser._id);
 
-  
+  //sử dụng useEffect để gọi showListFriend khi component được mount
+  useEffect(() => {
+    const showListFriend = async () => {
+      try {
+        const response = await getApiNoneToken('/getAllFriend/' + currentUser._id);
+        const data = response.data.data;
+        setCurrentFriends(data);
+      } catch (error) {
+        console.error('Error fetching friends list:', error);
+      }
+    };
+
+    showListFriend();
+  }, []);
    // Lọc ra các thành viên mới từ currentUser.phoneBooks không có trong participants
-   const newMembers = currentUser.phoneBooks.filter(
-    phoneBook => !participants.some(participant => participant.phone === phoneBook.phone)
+  //  const newMembers = currentUser.phoneBooks.filter(
+  //   phoneBook => !participants.some(participant => participant.phone === phoneBook.phone)
+  // );
+  const newMembers = currentFriends.filter(
+    friend => !participants.some(participant => participant.phone === friend.phone)
   );
   // Hàm để thêm thành viên mới vào danh sách đã chọn
   const addMember = (member) => {
@@ -68,6 +86,7 @@ const MenuChat = ({route, navigation}) => {
   
   // Giao diện của modal thêm thành viên
   const renderAddMemberModal = () => (
+    
     <Modal visible={showAddMemberModal} 
     animationType="slide" transparent ={true}>
       <View style={styles.modalContainer}>

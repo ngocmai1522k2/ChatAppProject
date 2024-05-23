@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ import {useSelector} from 'react-redux';
 import ListFriend from '../../components/ListFriend';
 import {addFriend} from '../../features/user/userSlice';
 import {useDispatch} from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Contact() {
   const [inviteList, setInviteList] = useState([]);
@@ -31,9 +32,15 @@ export default function Contact() {
   const [currentFriends, setCurrentFriends] = useState([]);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    showListFriend();
-  }, []);
+  // useEffect(() => {
+  //   showListFriend();
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+        showListFriend();
+    }, [])
+);
 
   const showListFriend = async () => {
     try {
@@ -106,6 +113,7 @@ export default function Contact() {
     // Gọi hàm để tải lại danh sách mới
     showListInvite();
     Alert.alert('Thêm bạn thành công');
+    showListFriend();
   };
 
   const rejectInvite = async (id, name, phone) => {
